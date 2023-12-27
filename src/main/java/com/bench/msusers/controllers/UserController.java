@@ -1,6 +1,6 @@
 package com.bench.msusers.controllers;
 
-import com.bench.msusers.UserResponseDTO;
+import com.bench.msusers.dto.UserResponseDTO;
 import com.bench.msusers.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +17,11 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-//    @GetMapping()
-//    public ResponseEntity<List<UserResponseDTO>> findAll() {
-//        log.info("Calling findAll with {}");
-//        return ResponseEntity.ok(userServiceImpl.findAll());
-//    }
+    @GetMapping()
+    public ResponseEntity<List<UserResponseDTO>> findAll() {
+        log.info("Calling findAll with {}");
+        return ResponseEntity.ok(userServiceImpl.findAll());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable(name = "id", required = true) Long id) {
@@ -29,10 +29,11 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findById(id));
     }
 
-//    @PostMapping()
-//    public ResponseEntity<UserResponseDTO> save(@Valid @RequestBody UserResponseDTO userResponseDTO) {
-//        log.info("Calling save with {}", userResponseDTO);
-//        return ResponseEntity.ok(userServiceImpl.save(userResponseDTO));
-//    }
+    //TODO: VALIDAR SI UN DNI YA EXISTENTE QUIERE AÑADIRSE NUEVAMENTE
+    @PostMapping()
+    public ResponseEntity<UserResponseDTO> save(@Valid @RequestBody UserResponseDTO userResponseDTO) {
+        log.info("Calling save with {}", userResponseDTO);
+        return ResponseEntity.ok(userServiceImpl.save(userResponseDTO));
+    }
 
 }
