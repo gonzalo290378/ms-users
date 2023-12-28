@@ -1,6 +1,7 @@
 package com.bench.msusers.controllers;
 
 import com.bench.msusers.dto.UserResponseDTO;
+import com.bench.msusers.model.User;
 import com.bench.msusers.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +30,10 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findById(id));
     }
 
-    //TODO: VALIDAR SI UN DNI YA EXISTENTE QUIERE AÑADIRSE NUEVAMENTE
     @PostMapping()
-    public ResponseEntity<UserResponseDTO> save(@Valid @RequestBody UserResponseDTO userResponseDTO) {
-        log.info("Calling save with {}", userResponseDTO);
-        return ResponseEntity.ok(userServiceImpl.save(userResponseDTO));
+    public ResponseEntity<User> save(@RequestBody @Valid User user) {
+        log.info("Calling save with {}", user);
+        return ResponseEntity.ok(userServiceImpl.save(user));
     }
 
 }

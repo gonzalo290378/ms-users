@@ -38,16 +38,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = false)
-    public UserResponseDTO save(UserResponseDTO userResponseDTO) {
+    public User save(User user) {
         User newUser = new User().builder()
-                .username(userResponseDTO.getUsername())
-                .password(userResponseDTO.getPassword())
-                .email(userResponseDTO.getEmail())
-                .dni(userResponseDTO.getDni())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .dni(user.getDni())
                 .build();
 
-        newUser = userRepository.save(newUser);
-        return userMapper.toDTO(newUser);
+        return userRepository.save(newUser);
     }
 
 }

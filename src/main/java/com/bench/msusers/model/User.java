@@ -1,10 +1,7 @@
 package com.bench.msusers.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,27 +16,26 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @NotBlank
+
+    @Size(min=5, message = "Username should have at least 5 characters")
     @Column(name = "username")
     private String username;
 
-    @NotNull
-    @NotBlank
+
+    @Size(min=5, message = "Password should have at least 5 characters")
     @Column(name = "password")
     private String password;
 
-    @NotNull
-    @NotBlank
-    @Email
+    @Email(message = "Please provide a valid email address")
+    @NotEmpty(message = "Email cannot be empty")
     @Column(name = "email")
     private String email;
 
-    @NotNull
-    @Min(value=7, message="Must be equal or greater than 7")
+    @NotNull(message = "Dni cannot be empty")
     @Column(name = "dni")
     private Long dni;
 
