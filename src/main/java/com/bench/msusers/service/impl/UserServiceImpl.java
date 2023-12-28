@@ -1,15 +1,14 @@
 package com.bench.msusers.service.impl;
 
-import com.bench.msusers.UserResponseDTO;
+import com.bench.msusers.dto.UserResponseDTO;
+import com.bench.msusers.exceptions.UserNotFoundException;
+import com.bench.msusers.mapper.UserMapper;
 import com.bench.msusers.model.User;
 import com.bench.msusers.repositories.UserRepository;
 import com.bench.msusers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,28 +18,36 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private UserMapper userMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return null;
+                new UserNotFoundException("id: " +  id + " does not exist"));
+        return userMapper.toDTO(user);
     }
 
 
-//    @Transactional(readOnly = false)
-//    public List<UserResponseDTO> findAll() {
-//        List<User> userList = userRepository.findAll();
-//        return userList.stream()
-//                .map(userMapper::toDTO)
-//                .collect(Collectors.toList());
-//    }
+    @Transactional(readOnly = true)
+    public List<UserResponseDTO> findAll() {
+        List<User> userList = userRepository.findAll();
+        return userList.stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
-//    @Transactional(readOnly = false)
-//    public UserResponseDTO save(UserResponseDTO userResponseDTO) {
-//        return null;
-//    }
+    @Transactional(readOnly = false)
+    public UserResponseDTO save(UserResponseDTO userResponseDTO) {
+        User newUser = new User().builder()
+                .username(userResponseDTO.getUsername())
+                .password(userResponseDTO.getPassword())
+                .email(userResponseDTO.getEmail())
+                .dni(userResponseDTO.getDni())
+                .build();
+
+        newUser = userRepository.save(newUser);
+        return userMapper.toDTO(newUser);
+    }
 
 }
