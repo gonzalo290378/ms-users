@@ -20,11 +20,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Size(min=5, message = "Username should have at least 5 characters")
     @Column(name = "username")
     private String username;
-
 
     @Size(min=5, message = "Password should have at least 5 characters")
     @Column(name = "password")
