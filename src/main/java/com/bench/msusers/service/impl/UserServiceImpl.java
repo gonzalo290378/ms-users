@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = false)
     public User save(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()
-                || userRepository.findByDni(user.getDni()).isPresent()) {
+                || userRepository. findByDni((user.getDni())).isPresent()) {
             throw new UserNotFoundException("Username/Dni was registered");
         }
         User newUser = new User().builder()
@@ -50,10 +50,8 @@ public class UserServiceImpl implements UserService {
                 .email(user.getEmail())
                 .dni(user.getDni())
                 .build();
-
         return userRepository.save(newUser);
     }
-
     @Transactional(readOnly = false)
     public void delete(Long id) {
         Optional<User> user = userRepository.findById(id);

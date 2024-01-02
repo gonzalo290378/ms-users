@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -29,6 +30,7 @@ public class UserController {
         log.info("Calling findById with {}", id);
         return ResponseEntity.ok(userServiceImpl.findById(id));
     }
+
 
     @PostMapping()
     public ResponseEntity<User> save(@RequestBody @Valid User user) {
