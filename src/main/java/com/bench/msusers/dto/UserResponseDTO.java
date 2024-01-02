@@ -26,6 +26,6 @@ public class UserResponseDTO implements Serializable {
     private String email;
 
     @JsonProperty("dni")
-    private Long dni;
+    private String dni;
 
 }

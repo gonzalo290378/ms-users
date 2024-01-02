@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "users")
@@ -33,8 +34,8 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @NotNull(message = "Dni cannot be empty")
+    @Size(min = 7, max = 8, message = "Dni must have 7 to 8 characters")
     @Column(name = "dni")
-    private Long dni;
+    private String dni;
 
 }
