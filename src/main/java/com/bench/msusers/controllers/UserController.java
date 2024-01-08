@@ -43,6 +43,12 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findById(id));
     }
 
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<UserResponseDTO> findByDni(@PathVariable(name = "dni", required = true) String dni) {
+        log.info("Calling findByDni with {}", dni);
+        return ResponseEntity.ok(userServiceImpl.findByDni(dni));
+    }
+
 
     @PostMapping()
     public ResponseEntity<User> save(@RequestBody @Valid User user) {
