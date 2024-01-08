@@ -1,6 +1,7 @@
 package com.bench.msusers.service.impl;
 
 import com.bench.msusers.dto.UserResponseDTO;
+import com.bench.msusers.exceptions.DniNotFoundException;
 import com.bench.msusers.exceptions.UserNotFoundException;
 import com.bench.msusers.mapper.UserMapper;
 import com.bench.msusers.model.User;
@@ -59,5 +60,11 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("id: " +  id + " does not exist");
         }
         userRepository.delete(user.get());
+    }
+
+    public UserResponseDTO findByDni(String dni){
+        User user = userRepository.findByDni(dni).orElseThrow(() ->
+                new DniNotFoundException("Dni: " +  dni + " does not exist"));
+        return userMapper.toDTO(user);
     }
 }
