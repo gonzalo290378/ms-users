@@ -38,4 +38,7 @@ public class User {
     @Column(name = "dni")
     private String dni;
 
+    @Transient
+    private Integer port;
+
 }

@@ -28,4 +28,7 @@ public class UserResponseDTO implements Serializable {
     @JsonProperty("dni")
     private String dni;
 
+    @JsonProperty("port")
+    private Integer port;
+
 }
