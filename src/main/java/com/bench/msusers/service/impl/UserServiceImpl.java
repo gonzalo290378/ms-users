@@ -7,10 +7,14 @@ import com.bench.msusers.mapper.UserMapper;
 import com.bench.msusers.model.User;
 import com.bench.msusers.repositories.UserRepository;
 import com.bench.msusers.service.UserService;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    Environment environment;
 
     @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {

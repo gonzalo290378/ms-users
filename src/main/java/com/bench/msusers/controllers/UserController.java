@@ -7,14 +7,15 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -27,14 +28,13 @@ public class UserController {
     @Autowired
     private Environment environment;
 
-    //CONFIG-SERVER
-    @Value("${configuration.text}")
-    private String text;
-
     @GetMapping()
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         log.info("Calling findAll with {}");
-        return ResponseEntity.ok(userServiceImpl.findAll());
+        String port = environment.getProperty("local.server.port");
+        return ResponseEntity.ok(userServiceImpl.findAll().stream()
+                .peek(user -> user.setPort(Integer.parseInt(port)))
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
@@ -61,19 +61,6 @@ public class UserController {
         userServiceImpl.delete(id);
         log.info("Calling delete with {}", id);
         return ResponseEntity.ok("Successfully deleted");
-    }
-
-    @GetMapping("/get-config")
-    public ResponseEntity<?> getConfig(@Value("${server.port}") String port) {
-        log.info("getConfig {}" + " port: " + port);
-        Map<String, String> json = new HashMap<>();
-        json.put("text", text);
-        json.put("port", port);
-
-        if (environment.getActiveProfiles().length > 0 && environment.getActiveProfiles()[0].equals("dev")) {
-            json.put("env", environment.getActiveProfiles()[0]);
-        }
-        return new ResponseEntity<Map<String, String>>(json, HttpStatus.OK);
     }
 
 }
