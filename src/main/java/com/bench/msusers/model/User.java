@@ -1,12 +1,13 @@
 package com.bench.msusers.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "users")
@@ -21,11 +22,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min=5, message = "Username should have at least 5 characters")
+    @Size(min = 5, message = "Username should have at least 5 characters")
     @Column(name = "username")
     private String username;
 
-    @Size(min=5, message = "Password should have at least 5 characters")
+    @Size(min = 5, message = "Password should have at least 5 characters")
     @Column(name = "password")
     private String password;
 
