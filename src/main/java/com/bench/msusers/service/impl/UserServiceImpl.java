@@ -7,14 +7,11 @@ import com.bench.msusers.mapper.UserMapper;
 import com.bench.msusers.model.User;
 import com.bench.msusers.repositories.UserRepository;
 import com.bench.msusers.service.UserService;
-import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("id: " +  id + " does not exist"));
+                new UserNotFoundException("id: " + id + " does not exist"));
         return userMapper.toDTO(user);
     }
 
@@ -49,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = false)
     public User save(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()
-                || userRepository. findByDni((user.getDni())).isPresent()) {
+                || userRepository.findByDni((user.getDni())).isPresent()) {
             throw new UserNotFoundException("Username/Dni was registered");
         }
         User newUser = new User().builder()
@@ -60,18 +57,19 @@ public class UserServiceImpl implements UserService {
                 .build();
         return userRepository.save(newUser);
     }
+
     @Transactional(readOnly = false)
     public void delete(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
-            throw new UserNotFoundException("id: " +  id + " does not exist");
+            throw new UserNotFoundException("id: " + id + " does not exist");
         }
         userRepository.delete(user.get());
     }
 
-    public UserResponseDTO findByDni(String dni){
+    public UserResponseDTO findByDni(String dni) {
         User user = userRepository.findByDni(dni).orElseThrow(() ->
-                new DniNotFoundException("Dni: " +  dni + " does not exist"));
+                new DniNotFoundException("Dni: " + dni + " does not exist"));
         return userMapper.toDTO(user);
     }
 }

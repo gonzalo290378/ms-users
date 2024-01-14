@@ -2,7 +2,6 @@ package com.bench.msusers.service;
 
 import com.bench.msusers.dto.UserResponseDTO;
 import com.bench.msusers.model.User;
-
 import java.util.List;
 
 public interface UserService {
