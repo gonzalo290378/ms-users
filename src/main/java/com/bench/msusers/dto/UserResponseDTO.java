@@ -1,11 +1,13 @@
 package com.bench.msusers.dto;
 
+import com.bench.users.commons.model.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
@@ -30,5 +32,8 @@ public class UserResponseDTO implements Serializable {
 
     @JsonProperty("port")
     private Integer port;
+
+    @JsonProperty("roles")
+    private List<Role> roles;
 
 }

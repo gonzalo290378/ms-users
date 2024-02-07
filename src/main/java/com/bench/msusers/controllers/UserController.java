@@ -1,18 +1,15 @@
 package com.bench.msusers.controllers;
 
 import com.bench.msusers.dto.UserResponseDTO;
-import com.bench.msusers.model.User;
 import com.bench.msusers.service.impl.UserServiceImpl;
+import com.bench.users.commons.model.User;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,6 +46,12 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findByDni(dni));
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserResponseDTO> findByUsername(@PathVariable(name = "username", required = true) String username) {
+        log.info("Calling findByUsername with {}", username);
+        return ResponseEntity.ok(userServiceImpl.findByUsername(username));
+    }
+
 
     @PostMapping()
     public ResponseEntity<User> save(@RequestBody @Valid User user) {
@@ -61,6 +64,12 @@ public class UserController {
         userServiceImpl.delete(id);
         log.info("Calling delete with {}", id);
         return ResponseEntity.ok("Successfully deleted");
+    }
+
+    @GetMapping("/authorized")
+    public Map<String, String> authorized(@RequestParam String code) {
+        log.info("Calling authorized with {}", code);
+        return Collections.singletonMap("code", code);
     }
 
 }

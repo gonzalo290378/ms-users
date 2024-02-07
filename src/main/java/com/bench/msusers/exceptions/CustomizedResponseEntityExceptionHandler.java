@@ -31,4 +31,10 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public final ResponseEntity<ErrorDetails> handleUsernameNotFoundException(Exception e, WebRequest webRequest) throws Exception {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), e.getMessage(), webRequest.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
 }

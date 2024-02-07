@@ -3,8 +3,9 @@ package com.bench.msusers.service.impl;
 import com.bench.msusers.dto.UserResponseDTO;
 import com.bench.msusers.exceptions.DniNotFoundException;
 import com.bench.msusers.exceptions.UserNotFoundException;
+import com.bench.msusers.exceptions.UsernameNotFoundException;
 import com.bench.msusers.mapper.UserMapper;
-import com.bench.msusers.model.User;
+import com.bench.users.commons.model.User;
 import com.bench.msusers.repositories.UserRepository;
 import com.bench.msusers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPassword())
                 .email(user.getEmail())
                 .dni(user.getDni())
+                .roles(user.getRoles())
                 .build();
         return userRepository.save(newUser);
     }
@@ -70,6 +72,12 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO findByDni(String dni) {
         User user = userRepository.findByDni(dni).orElseThrow(() ->
                 new DniNotFoundException("Dni: " + dni + " does not exist"));
+        return userMapper.toDTO(user);
+    }
+
+    public UserResponseDTO findByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("Username: " + username + " does not exist"));
         return userMapper.toDTO(user);
     }
 }
