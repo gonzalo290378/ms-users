@@ -1,7 +1,7 @@
 package com.bench.msusers.mapper;
 
 import com.bench.msusers.dto.UserResponseDTO;
-import com.bench.msusers.model.User;
+import com.bench.users.commons.model.*;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
