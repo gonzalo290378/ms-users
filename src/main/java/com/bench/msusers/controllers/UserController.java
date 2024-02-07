@@ -52,7 +52,6 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findByUsername(username));
     }
 
-
     @PostMapping()
     public ResponseEntity<User> save(@RequestBody @Valid User user) {
         log.info("Calling save with {}", user);
