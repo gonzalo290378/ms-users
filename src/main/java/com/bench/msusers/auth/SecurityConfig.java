@@ -6,25 +6,21 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authHttp) -> authHttp
-                        .requestMatchers(HttpMethod.GET, "/authorized").permitAll()
+                        .requestMatchers("/authorized").permitAll()
                         .requestMatchers("/", "/static/**", "/index.html", "/api/v1/users/username/{username}").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/").hasAnyAuthority("SCOPE_read", "SCOPE_write")
-//                        .requestMatchers(HttpMethod.POST, "/").hasAuthority("SCOPE_write")
-//                        .requestMatchers(HttpMethod.POST, "/api/v1/users").hasRole("USER")
-//                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/{id}").hasRole("USER")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -33,4 +29,16 @@ public class SecurityConfig {
                 .oauth2ResourceServer(resourceServer -> resourceServer.jwt(withDefaults()));
         return http.build();
     }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
+
+    }
 }
+
