@@ -27,6 +27,7 @@ public class UserController {
     private Environment environment;
 
     @GetMapping()
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         log.info("Calling findAll with {}");
         String port = environment.getProperty("local.server.port");
@@ -36,12 +37,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable(name = "id", required = true) Long id) {
         log.info("Calling findById with {}", id);
         return ResponseEntity.ok(userServiceImpl.findById(id));
     }
 
     @GetMapping("/dni/{dni}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<UserResponseDTO> findByDni(@PathVariable(name = "dni", required = true) String dni) {
         log.info("Calling findByDni with {}", dni);
         return ResponseEntity.ok(userServiceImpl.findByDni(dni));
@@ -54,12 +57,14 @@ public class UserController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<User> save(@RequestBody @Valid User user) {
         log.info("Calling save with {}", user);
         return ResponseEntity.ok(userServiceImpl.save(user));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteById(@PathVariable(name = "id", required = true) Long id) {
         userServiceImpl.delete(id);
         log.info("Calling delete with {}", id);
