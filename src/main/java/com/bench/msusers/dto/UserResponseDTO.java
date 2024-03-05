@@ -30,10 +30,10 @@ public class UserResponseDTO implements Serializable {
     @JsonProperty("dni")
     private String dni;
 
-    @JsonProperty("port")
-    private Integer port;
-
     @JsonProperty("roles")
     private List<Role> roles;
+
+    @JsonProperty("port")
+    private Integer port;
 
 }

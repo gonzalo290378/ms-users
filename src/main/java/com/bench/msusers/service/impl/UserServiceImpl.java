@@ -5,32 +5,40 @@ import com.bench.msusers.exceptions.DniNotFoundException;
 import com.bench.msusers.exceptions.UserNotFoundException;
 import com.bench.msusers.exceptions.UsernameNotFoundException;
 import com.bench.msusers.mapper.UserMapper;
-import com.bench.users.commons.model.User;
 import com.bench.msusers.repositories.UserRepository;
 import com.bench.msusers.service.UserService;
+import com.bench.users.commons.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private UserMapper userMapper;
 
-    @Autowired
     Environment environment;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, Environment environment) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.environment = environment;
+    }
+
 
     @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
+        User user = userRepository.findAll()
+                .stream()
+                .filter(e -> e.getId() == id)
+                .findFirst().orElseThrow(() ->
                 new UserNotFoundException("id: " + id + " does not exist"));
         return userMapper.toDTO(user);
     }
