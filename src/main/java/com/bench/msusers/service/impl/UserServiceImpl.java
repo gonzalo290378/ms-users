@@ -8,7 +8,6 @@ import com.bench.msusers.mapper.UserMapper;
 import com.bench.msusers.repositories.UserRepository;
 import com.bench.msusers.service.UserService;
 import com.bench.users.commons.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .filter(e -> e.getId() == id)
                 .findFirst().orElseThrow(() ->
-                new UserNotFoundException("id: " + id + " does not exist"));
+                        new UserNotFoundException("id: " + id + " does not exist"));
         return userMapper.toDTO(user);
     }
 
@@ -78,8 +77,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponseDTO findByDni(String dni) {
-        User user = userRepository.findByDni(dni).orElseThrow(() ->
-                new DniNotFoundException("Dni: " + dni + " does not exist"));
+        User user = userRepository.findAll()
+                .stream()
+                .filter(e -> e.getDni().equals(dni))
+                .findFirst().orElseThrow(() ->
+                        new DniNotFoundException("dni: " + dni + " does not exist"));
         return userMapper.toDTO(user);
     }
 
